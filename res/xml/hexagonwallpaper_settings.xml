@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+	android:title="@string/settings"
+	android:key="settings">
+
+    <PreferenceCategory android:title="@string/settings_wallpaper">
+		<ListPreference
+			android:key="colors"
+			android:title="@string/colors_title"
+			android:summary="@string/colors_summary"
+			android:entries="@array/colors_entries"
+			android:entryValues="@array/colors_entriesV"/>
+		<ListPreference
+			android:key="perspective"
+			android:title="@string/perspective_title"
+			android:summary="@string/perspective_summary"
+			android:entries="@array/perspective_entries"
+			android:entryValues="@array/perspective_entriesV"/>
+		<ListPreference
+			android:key="zoom"
+			android:title="@string/zoom_title"
+			android:summary="@string/zoom_summary"
+			android:entries="@array/zoom_entries"
+			android:entryValues="@array/zoom_entriesV"/>
+		<ListPreference
+			android:key="pulse"
+			android:title="@string/pulse_title"
+			android:summary="@string/pulse_summary"
+			android:entries="@array/pulse_entries"
+			android:entryValues="@array/pulse_entriesV"/>
+		<ListPreference
+			android:key="rotation"
+			android:title="@string/rotation_title"
+			android:summary="@string/rotation_summary"
+			android:entries="@array/rotation_entries"
+			android:entryValues="@array/rotation_entriesV"/>
+		<ListPreference
+			android:key="walls"
+			android:title="@string/walls_title"
+			android:summary="@string/walls_summary"
+			android:entries="@array/walls_entries"
+			android:entryValues="@array/walls_entriesV"/>
+	</PreferenceCategory>
+	
+    <PreferenceCategory android:title="@string/settings_links">
+		<Preference
+		    android:title="@string/buy"
+			android:summary="@string/buy_desc" >
+		    <intent android:action="android.intent.action.VIEW"
+		            android:data="https://play.google.com/store/apps/details?id=com.distractionware.superhexagon" />
+		</Preference>
+		<Preference
+		    android:title="@string/contact"
+			android:summary="@string/contact_desc" >
+		    <intent android:action="android.intent.action.VIEW"
+		            android:data="https://twitter.com/Suyo_" />
+		</Preference>
+	</PreferenceCategory>
+</PreferenceScreen>
