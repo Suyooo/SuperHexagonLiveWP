@@ -29,6 +29,8 @@ public class HexagonRenderer implements GLWallpaperService.Renderer {
 	private float zoom_speed = 0;
 	
 	private int pulse_timer = 0;
+
+    private float cursor_pos = 0;
 	
 	private int w;
 	private int h;
@@ -38,6 +40,7 @@ public class HexagonRenderer implements GLWallpaperService.Renderer {
 	private Mesh hexagonO;
 	private Mesh hexagonI;
     private Mesh wall;
+    private Mesh cursor;
 
     private ArrayList<Wall> walls = new ArrayList<Wall>();
 	
@@ -195,8 +198,114 @@ public class HexagonRenderer implements GLWallpaperService.Renderer {
                     }
                 }
             }
+            ArrayList<Wall> dangerWalls = new ArrayList<Wall>();
+            for (Wall w : walls) {
+                if (w.dist<1 && w.dist>0.05) {
+                    if (dangerWalls.size()==0) dangerWalls.add(w);
+                    else {
+                        if (w.dist<dangerWalls.get(0).dist) {
+                            dangerWalls.clear();
+                            dangerWalls.add(w);
+                        } else if (w.dist==dangerWalls.get(0).dist) {
+                            dangerWalls.add(w);
+                        }
+                    }
+                }
+            }
+
+            if (service.prefs_cursor>0) {
+                if (dangerWalls.size()==1) {
+                    if (dangerWalls.get(0).dodged==false) {
+                        int danger = dangerWalls.get(0).lane*60+30;
+                        if (Math.abs(cursor_pos-danger)<30+Math.random()*20) {
+                            if (cursor_pos<danger) cursor_pos-=7;
+                            else cursor_pos+=7;
+                        } else {
+                            danger+=360;
+                            if (Math.abs(cursor_pos-danger)<30+Math.random()*20) {
+                                if (cursor_pos<danger) cursor_pos-=7;
+                                else cursor_pos+=7;
+                            } else {
+                                danger-=720;
+                                if (Math.abs(cursor_pos-danger)<60+Math.random()*30) {
+                                    if (cursor_pos<danger) cursor_pos-=7;
+                                    else cursor_pos+=7;
+                                } else {
+                                    dangerWalls.get(0).dodged=true;
+                                }
+                            }
+                        }
+                    }
+                } else if (dangerWalls.size()==2) {
+                    if (dangerWalls.get(0).dodged==false) {
+                        int lanes[] = new int[2];
+                        lanes[0] = dangerWalls.get(0).lane;
+                        lanes[1] = dangerWalls.get(1).lane;
+                        if (lanes[0]==0 || lanes[1]==0) {
+                            if (lanes[0]==5) lanes[0]=-1;
+                            else if (lanes[1]==5) lanes[1]=-1;
+                        }
+                        int danger = (int)(((float)(lanes[0]+lanes[1])/2.0)*60+30);
+                        if (Math.abs(cursor_pos-danger)<60+Math.random()*30) {
+                            if (cursor_pos<danger) cursor_pos-=7;
+                            else cursor_pos+=7;
+                        } else {
+                            danger+=360;
+                            if (Math.abs(cursor_pos-danger)<60+Math.random()*30) {
+                                if (cursor_pos<danger) cursor_pos-=7;
+                                else cursor_pos+=7;
+                            } else {
+                                danger-=720;
+                                if (Math.abs(cursor_pos-danger)<60+Math.random()*30) {
+                                    if (cursor_pos<danger) cursor_pos-=7;
+                                    else cursor_pos+=7;
+                                } else {
+                                    dangerWalls.get(0).dodged=dangerWalls.get(1).dodged=true;
+                                }
+                            }
+                        }
+                    }
+                } else if (dangerWalls.size()==3) {
+                    if (dangerWalls.get(0).dodged==false) {
+                        int lanes[] = new int[3];
+                        lanes[0] = dangerWalls.get(0).lane;
+                        lanes[1] = dangerWalls.get(1).lane;
+                        lanes[2] = dangerWalls.get(2).lane;
+                        if (lanes[0]==0 || lanes[1]==0 || lanes[2]==0) {
+                            if (lanes[0]>3) lanes[0]-=6;
+                            if (lanes[1]>3) lanes[1]-=6;
+                            if (lanes[2]>3) lanes[2]-=6;
+                        }
+                        int danger = (int)(((float)(lanes[0]+lanes[1]+lanes[2])/3.0)*60+30);
+                        if (Math.abs(cursor_pos-danger)<90+Math.random()*40) {
+                            if (cursor_pos<danger) cursor_pos-=7;
+                            else cursor_pos+=7;
+                        } else {
+                            danger+=360;
+                            if (Math.abs(cursor_pos-danger)<90+Math.random()*40) {
+                                if (cursor_pos<danger) cursor_pos-=7;
+                                else cursor_pos+=7;
+                            } else {
+                                danger-=720;
+                                if (Math.abs(cursor_pos-danger)<90+Math.random()*30) {
+                                    if (cursor_pos<danger) cursor_pos-=7;
+                                    else cursor_pos+=7;
+                                } else {
+                                    dangerWalls.get(0).dodged=dangerWalls.get(1).dodged=dangerWalls.get(2).dodged=true;
+                                }
+                            }
+                        }
+                    }
+                }
+                if (dangerWalls.size()>0) {
+                    if (dangerWalls.get(0).dist<=0) {
+                        if (cursor_pos>360) cursor_pos-=360;
+                        if (cursor_pos<0) cursor_pos+=360;
+                    }
+                }
+            }
         }
-		
+
 		// Drawing
 		gl.glViewport( 0, 0, w, h);
 		if (swapStripes) gl.glClearColor(color2r, color2g, color2b, 1f);
@@ -239,6 +348,11 @@ public class HexagonRenderer implements GLWallpaperService.Renderer {
 				hexagonO.render(PrimitiveType.TriangleStrip);
 				gl.glColor4f(color1r, color1g, color1b, 1.0f);
 				hexagonI.render(PrimitiveType.TriangleStrip);
+                gl.glPushMatrix();
+                    gl.glRotatef(cursor_pos,0,0,1);
+                    gl.glColor4f(color3r, color3g, color3b, 1.0f);
+                    cursor.render(PrimitiveType.TriangleStrip);
+                gl.glPopMatrix();
 			gl.glPopMatrix();
 		gl.glPopMatrix();
 	}
@@ -347,6 +461,11 @@ public class HexagonRenderer implements GLWallpaperService.Renderer {
 		hexagonI.vertex(p[0], p[1], 0);
 		p = getLinePoint(0.19f,3);
 		hexagonI.vertex(p[0], p[1], 0);
+
+        cursor = new Mesh( gl, 3, false, false, false );
+        cursor.vertex(0.22f, -0.022f, 0);
+        cursor.vertex(0.22f, 0.022f, 0);
+        cursor.vertex(0.255f, 0f, 0);
 
         wall = new Mesh( gl, 4, false, false, false );
 	}

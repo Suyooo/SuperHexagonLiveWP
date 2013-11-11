@@ -40,6 +40,12 @@
 			android:summary="@string/walls_summary"
 			android:entries="@array/walls_entries"
 			android:entryValues="@array/walls_entriesV"/>
+        <ListPreference
+                android:key="cursor"
+                android:title="@string/cursor_title"
+                android:summary="@string/cursor_summary"
+                android:entries="@array/cursor_entries"
+                android:entryValues="@array/cursor_entriesV"/>
 	</PreferenceCategory>
 	
     <PreferenceCategory android:title="@string/settings_links">

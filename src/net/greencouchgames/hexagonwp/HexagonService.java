@@ -17,6 +17,7 @@ public class HexagonService extends GLWallpaperService {
 	public int prefs_pulse;
 	public int prefs_rotation;
 	public int prefs_walls;
+    public int prefs_cursor;
 	
 	public HexagonService() {
 		super();
@@ -49,6 +50,7 @@ public class HexagonService extends GLWallpaperService {
 				e.putString("pulse","1");
 				e.putString("rotation","-1");
 				e.putString("walls","3");
+                e.putString("cursor","1");
 				e.commit();
 			}
 			onSharedPreferenceChanged(preferences, null);
@@ -69,6 +71,7 @@ public class HexagonService extends GLWallpaperService {
 			service.prefs_pulse = Integer.parseInt(prefs.getString("pulse","1"));
 			service.prefs_rotation = Integer.parseInt(prefs.getString("rotation","-1"));
 			service.prefs_walls = Integer.parseInt(prefs.getString("walls","3"));
+            service.prefs_cursor = Integer.parseInt(prefs.getString("cursor","1"));
 		}
 	}
 }
