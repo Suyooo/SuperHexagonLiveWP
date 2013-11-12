@@ -466,6 +466,7 @@ public class HexagonRenderer implements GLWallpaperService.Renderer {
         cursor.vertex(0.22f, -0.022f, 0);
         cursor.vertex(0.22f, 0.022f, 0);
         cursor.vertex(0.255f, 0f, 0);
+        cursor_pos = (int)(Math.random()*360);
 
         wall = new Mesh( gl, 4, false, false, false );
 	}
