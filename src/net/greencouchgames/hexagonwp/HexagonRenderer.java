@@ -297,12 +297,8 @@ public class HexagonRenderer implements GLWallpaperService.Renderer {
                         }
                     }
                 }
-                if (dangerWalls.size()>0) {
-                    if (dangerWalls.get(0).dist<=0) {
-                        if (cursor_pos>360) cursor_pos-=360;
-                        if (cursor_pos<0) cursor_pos+=360;
-                    }
-                }
+                if (cursor_pos>360) cursor_pos-=360;
+                if (cursor_pos<0) cursor_pos+=360;
             }
         }
 
@@ -350,6 +346,8 @@ public class HexagonRenderer implements GLWallpaperService.Renderer {
 				hexagonI.render(PrimitiveType.TriangleStrip);
                 gl.glPushMatrix();
                     gl.glRotatef(cursor_pos,0,0,1);
+                    gl.glTranslatef(0.23f,0,0);
+                    //gl.glScalef(cursor_pos/360f,cursor_pos/360f,0);
                     gl.glColor4f(color3r, color3g, color3b, 1.0f);
                     cursor.render(PrimitiveType.TriangleStrip);
                 gl.glPopMatrix();
@@ -463,9 +461,9 @@ public class HexagonRenderer implements GLWallpaperService.Renderer {
 		hexagonI.vertex(p[0], p[1], 0);
 
         cursor = new Mesh( gl, 3, false, false, false );
-        cursor.vertex(0.22f, -0.022f, 0);
-        cursor.vertex(0.22f, 0.022f, 0);
-        cursor.vertex(0.255f, 0f, 0);
+        cursor.vertex(-0.017f, -0.022f, 0);
+        cursor.vertex(-0.017f, 0.022f, 0);
+        cursor.vertex(0.017f, 0, 0);
         cursor_pos = (int)(Math.random()*360);
 
         wall = new Mesh( gl, 4, false, false, false );
